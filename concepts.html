@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Concepts Explained</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        h2 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Concepts Explained</h1>
+    
+    <!-- 1. Line of High-Level Code to Stack Frame -->
+    <h2>1. Understand how a line of high-level code like JavaScript turns into and gets executed as a stack frame on the call stack (from high level languages to machine code)</h2>
+    <p>When you write high-level code in JavaScript, the code is first parsed by the JavaScript engine into an Abstract Syntax Tree (AST). The engine then compiles this AST into bytecode or machine code that the CPU can execute. This execution process involves managing function calls on the call stack. Each function call creates a new stack frame that contains the function's local variables, parameters, and return address.</p>
+    <pre><code>// Example code
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+console.log(greet('Alice')); // Stack frame for greet function
+    </code></pre>
+    
+    <!-- 2. Primitive Types Storage -->
+    <h2>2. Understand how different primitive types are stored in memory, down to the addresses, space allocated, and binary representation</h2>
+    <p>Primitive types in JavaScript, such as <code>number</code>, <code>string</code>, and <code>boolean</code>, are stored in memory in a simple, fixed-size format. For instance, <code>number</code> types are stored as 64-bit floating-point numbers (IEEE 754 standard). Strings are stored as sequences of UTF-16 code units. The exact memory address and space allocation depend on the JavaScript engine and the platform.</p>
+    <pre><code>// Example: Primitive types in memory
+let num = 42; // Stored as a 64-bit floating-point number
+let str = "Hello"; // Stored as a sequence of UTF-16 code units
+    </code></pre>
+    
+    <!-- 3. Value Types vs Reference Types -->
+    <h2>3. Understand the difference between value types and reference types, and assigning values vs assigning pointers</h2>
+    <p>Value types are stored directly and copied when assigned to another variable. Example: numbers and booleans. Reference types store a reference (or pointer) to the data. Example: objects and arrays. When you assign a reference type to another variable, both variables point to the same data.</p>
+    <pre><code>// Value types
+let a = 10;
+let b = a; // b is a copy of a
+b = 20; // a remains 10
+
+// Reference types
+let obj1 = { x: 10 };
+let obj2 = obj1; // obj2 is a reference to obj1
+obj2.x = 20; // obj1.x is also 20
+    </code></pre>
+    
+    <!-- 4. Typing -->
+    <h2>4. Understand implicit typing, explicit typing, nominal typing, structural typing, and duck typing</h2>
+    <p><strong>Implicit Typing:</strong> Types are inferred automatically by the compiler or interpreter. <br>
+    <strong>Explicit Typing:</strong> Types are specified by the developer. <br>
+    <strong>Nominal Typing:</strong> Types are distinguished by their names. <br>
+    <strong>Structural Typing:</strong> Types are distinguished by their shape or structure. <br>
+    <strong>Duck Typing:</strong> "If it looks like a duck and quacks like a duck, it must be a duck." Types are based on behavior rather than explicit type definitions.</p>
+    <pre><code>// Example of implicit typing
+let x = 42; // x is implicitly a number
+
+// Example of explicit typing (TypeScript)
+let y: number = 42; // y is explicitly a number
+    </code></pre>
+    
+    <!-- 5. == vs === vs typeof -->
+    <h2>5. Understand == vs === vs typeof</h2>
+    <p><strong>==</strong> is a loose equality operator that performs type coercion before comparison. <br>
+    <strong>===</strong> is a strict equality operator that performs no type coercion; both the type and value must match. <br>
+    <strong>typeof</strong> is an operator that returns a string indicating the type of the operand.</p>
+    <pre><code>// Example
+console.log(5 == '5');  // true (type coercion)
+console.log(5 === '5'); // false (no type coercion)
+console.log(typeof 5);  // "number"
+console.log(typeof '5'); // "string"
+    </code></pre>
+    
+    <!-- 6. Function Scope, Block Scope, and Lexical Scope -->
+    <h2>6. Understand function scope, block scope, and lexical scope</h2>
+    <p><strong>Function Scope:</strong> Variables declared inside a function are only accessible within that function. <br>
+    <strong>Block Scope:</strong> Variables declared with <code>let</code> and <code>const</code> are only accessible within the block they are declared. <br>
+    <strong>Lexical Scope:</strong> The scope of variables is determined by the physical structure of the code (i.e., where variables are declared).</p>
+    <pre><code>// Example
+function outer() {
+    let x = 'outer';
+    function inner() {
+        let y = 'inner';
+        console.log(x); // outer (lexical scope)
+        console.log(y); // inner (function scope)
+    }
+    console.log(y); // ReferenceError (y is not accessible here)
+    inner();
+}
+outer();
+    </code></pre>
+    
+    <!-- 7. Expression vs Statement -->
+    <h2>7. Understand the difference between an expression and a statement, and what it means to evaluate an expression</h2>
+    <p><strong>Expression:</strong> A piece of code that produces a value. <br>
+    <strong>Statement:</strong> A piece of code that performs an action. <br>
+    Evaluating an expression means executing the code to produce a value.</p>
+    <pre><code>// Example
+let a = 5 + 3; // Expression (evaluates to 8)
+if (a > 5) {    // Statement (performs an action)
+    console.log(a); // Statement (performs an action)
+}
+    </code></pre>
+    
+    <!-- 8. Memory/Call Stack vs Variable Assignment -->
+    <h2>8. Understand what happens (or doesn’t) in memory/on the call stack when an expression is evaluated, argument passed, result returned, etc. vs when a value is assigned or retrieved from a variable</h2>
+    <p>When an expression is evaluated, the JavaScript engine computes the result and may temporarily use memory and stack space to store intermediate values. Passing arguments involves copying values (for primitive types) or references (for objects). When a function returns, its stack frame is removed. Variable assignment stores a value in a specific memory location, which can be retrieved later.</p>
+    <pre><code>// Example
+function add(a, b) {
+    return a + b; // Evaluation of the expression a + b
+}
+let result = add(2, 3); // Argument passed, result returned, value assigned to result
+    </code></pre>
+    
+    <!-- 9. IIFE, Modules, Namespaces -->
+    <h2>9. Understand IIFE’s, modules, and namespaces. And why ES6 modules and block scope don’t fully replace IIFE’s</h2>
+    <p><strong>IIFE (Immediately Invoked Function Expression):</strong> A function that is executed immediately after its definition. <br>
+    <strong>Modules:</strong> Encapsulate code in separate files or units, providing better structure and reuse. <br>
+    <strong>Namespaces:</strong> Used to group related functions and variables to avoid name collisions. <br>
+    ES6 modules and block scope provide similar benefits but IIFE's are still useful for isolating code in environments that do not support modules.</p>
+    <pre><code>// Example of IIFE
+(function() {
+    let privateVar = 'I am private';
+    console.log(privateVar);
+})();
+
+// Example of ES6 module
+// In file math.js
+export function add(a, b) {
+    return a + b;
+}
+
+// In another file
+import { add } from './math.js';
+console.log(add(2, 3));
+    </code></pre>
+    
+    <!-- 10. Message Queue and Event Loop -->
+    <h2>10. Understand how the message queue and event loop work in JavaScript specifically, and how it affects timing, hang, async, etc.</h2>
+    <p>The message queue holds messages or tasks (such as callbacks) to be processed by the event loop. The event loop continuously checks the call stack and message queue. If the stack is empty, it processes messages from the queue. This affects how asynchronous tasks are handled, and can lead to timing issues or hangs if not managed properly.</p>
+    <pre><code>// Example
+console.log('Start');
+
+setTimeout(() => {
+    console.log('Timeout callback');
+}, 1000);
+
+console.log('End'); // Logs 'Start', 'End', 'Timeout callback' (after 1 second)
+    </code></pre>
+    
+    <!-- 11. setTimeout, setInterval, requestAnimationFrame -->
+    <h2>11. (Browser) Understand setTimeout, setInterval, and requestAnimationFrame</h2>
+    <p><strong>setTimeout:</strong> Executes a function after a specified delay. <br>
+    <strong>setInterval:</strong> Repeatedly executes a function at specified intervals. <br>
+    <strong>requestAnimationFrame:</strong> Schedules a function to be called before the next repaint, providing smooth animations.</p>
+    <pre><code>// Example of setTimeout
+setTimeout(() => {
+    console.log('Executed after 1000ms');
+}, 1000);
+
+// Example of setInterval
+setInterval(() => {
+    console.log('Executed every 1000ms');
+}, 1000);
+
+// Example of requestAnimationFrame
+function animate() {
+    console.log('Animating');
+    requestAnimationFrame(animate); // Continue animation
+}
+requestAnimationFrame(animate);
+    </code></pre>
+    
+    <!-- 12. Performance, Big O Notation -->
+    <h2>12. Understand which operations are more expensive and why (expensive meaning cost more processing time or memory). Are number of iterations really the most impactful on performance (typically)? What does Big O notation really tell us? Use jsperf and performance.now to run some tests and find out.</h2>
+    <p>Operations that involve nested loops, complex calculations, or large data structures are generally more expensive in terms of time and memory. Big O notation describes the worst-case time complexity of an algorithm, helping to understand how performance scales with input size. Tools like jsPerf and <code>performance.now()</code> can be used to measure execution time and compare performance.</p>
+    <pre><code>// Example of measuring performance
+console.time('Timer');
+for (let i = 0; i < 1000000; i++) {
+    // Some code
+}
+console.timeEnd('Timer');
+    </code></pre>
+    
+    <!-- 13. Opts and Deopts -->
+    <h2>13. Understand what opts and deopts are, and how to keep up to date on the across the different JavaScript engines</h2>
+    <p><strong>Opts (Optimizations):</strong> Techniques used by JavaScript engines to improve performance, such as JIT (Just-In-Time) compilation. <br>
+    <strong>Deopts (De-Optimizations):</strong> Situations where the engine reverts to a slower execution mode due to changes in code behavior or structure. Keeping track of engine updates and performance documentation helps in understanding and managing these optimizations and deoptimizations.</p>
+    
+    <!-- 14. Number Representation -->
+    <h2>14. Understand how to represent numbers in binary, hex, dec, scientific notation, etc. in JavaScript and other languages</h2>
+    <p>Numbers can be represented in various formats: <br>
+    <strong>Binary:</strong> Base-2 (e.g., <code>0b1010</code> for 10). <br>
+    <strong>Hexadecimal:</strong> Base-16 (e.g., <code>0xA</code> for 10). <br>
+    <strong>Decimal:</strong> Base-10 (e.g., <code>10</code>). <br>
+    <strong>Scientific Notation:</strong> (e.g., <code>1.0e+2</code> for 100).</p>
+    <pre><code>// Example
+console.log(0b1010); // 10 in binary
+console.log(0xA);    // 10 in hexadecimal
+console.log(10);     // 10 in decimal
+console.log(1.0e+2); // 100 in scientific notation
+    </code></pre>
+    
+    <!-- 15. Bitwise Operators, Typed Arrays -->
+    <h2>15. Understand how bitwise operators, typed arrays, and array buffers work. Use understanding RGBA as a way to understand how to manipulate binary data.</h2>
+    <p><strong>Bitwise Operators:</strong> Perform operations on the binary representations of numbers (e.g., <code>&</code>, <code>|</code>, <code>^</code>). <br>
+    <strong>Typed Arrays:</strong> Provide a way to work with binary data directly in JavaScript (e.g., <code>Uint8Array</code>). <br>
+    <strong>Array Buffers:</strong> A low-level representation of raw binary data. <br>
+    <strong>RGBA:</strong> A color model where each component (Red, Green, Blue, Alpha) is represented by an 8-bit integer.</p>
+    <pre><code>// Example of bitwise operators
+let a = 5; // 0101 in binary
+let b = 3; // 0011 in binary
+console.log(a & b); // 1 (0001 in binary)
+
+// Example of Typed Arrays
+let buffer = new ArrayBuffer(8);
+let view = new Uint8Array(buffer);
+view[0] = 255; // Set value in the buffer
+console.log(view[0]); // 255
+
+// Example of RGBA
+let color = new Uint8Array([255, 0, 0, 255]); // Red color with full opacity
+    </code></pre>
+    
+    <!-- 16. In-Memory DOM and Layout Trees -->
+    <h2>16. (Browser) Understanding how the in-memory DOM and layout trees are built and modified, when/how reflows/layouts, composites and repaints are triggered</h2>
+    <p>The DOM (Document Object Model) represents the structure of a webpage in memory. The layout tree determines the positions and sizes of elements. Changes to the DOM or CSS can trigger reflows (layout recalculations) and repaints (visual updates). Reflows occur when the layout changes, while repaints occur for visual changes that do not affect layout.</p>
+    
+    <!-- 17. new, Constructors, instanceof -->
+    <h2>17. Understand new, constructors, instanceof, and instances</h2>
+    <p><strong>new:</strong> Creates a new instance of an object defined by a constructor function. <br>
+    <strong>Constructors:</strong> Functions that initialize newly created objects. <br>
+    <strong>instanceof:</strong> Checks whether an object is an instance of a specific constructor.</p>
+    <pre><code>// Example
+function Person(name) {
+    this.name = name;
+}
+
+let alice = new Person('Alice');
+console.log(alice instanceof Person); // true
+    </code></pre>
+    
+    <!-- 18. Prototypical Inheritance -->
+    <h2>18. Understand prototypical inheritance and the prototype chain. And how even with class JavaScript still doesn’t achieve classical inheritance</h2>
+    <p>Prototypical inheritance allows objects to inherit properties and methods from other objects via the prototype chain. In JavaScript, each object has a prototype, and inheritance is achieved by chaining prototypes. Although ES6 classes provide a syntax that resembles classical inheritance, JavaScript's underlying inheritance model remains prototypical.</p>
+    <pre><code>// Example
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.speak = function() {
+    console.log(`${this.name} makes a noise.`);
+};
+
+function Dog(name) {
+    Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+let dog = new Dog('Rex');
+dog.speak(); // Rex makes a noise.
+    </code></pre>
+    
+    <!-- 19. Object.create vs Object.assign -->
+    <h2>19. Understand the differences between Object.create and Object.assign</h2>
+    <p><strong>Object.create:</strong> Creates a new object with the specified prototype. <br>
+    <strong>Object.assign:</strong> Copies properties from one or more source objects to a target object.</p>
+    <pre><code>// Example of Object.create
+let proto = { greet: 'Hello' };
+let obj = Object.create(proto);
+console.log(obj.greet); // Hello
+
+// Example of Object.assign
+let target = { a: 1 };
+let source = { b: 2 };
+Object.assign(target, source);
+console.log(target); // { a: 1, b: 2 }
+    </code></pre>
+    
+    <!-- 20. Factories and Classes -->
+    <h2>20. Understand factories and classes, and how these approaches differ</h2>
+    <p><strong>Factories:</strong> Functions that create and return objects. <br>
+    <strong>Classes:</strong> ES6 syntax for creating objects and handling inheritance.</p>
+    <pre><code>// Example of a factory function
+function createPerson(name) {
+    return {
+        name: name,
+        greet() {
+            console.log(`Hello, ${this.name}`);
+        }
+    };
+}
+
+let person = createPerson('Alice');
+person.greet(); // Hello, Alice
+
+// Example of a class
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+    greet() {
+        console.log(`Hello, ${this.name}`);
+    }
+}
+
+let person = new Person('Alice');
+person.greet(); // Hello, Alice
+    </code></pre>
+    
+    <!-- 21. Member Properties vs Prototype Properties -->
+    <h2>21. Understand the difference between member properties and properties on the prototype</h2>
+    <p><strong>Member Properties:</strong> Properties directly assigned to an instance. <br>
+    <strong>Prototype Properties:</strong> Properties assigned to the prototype object and shared across instances.</p>
+    <pre><code>// Example
+function Person(name) {
+    this.name = name; // Member property
+}
+
+Person.prototype.greet = function() {
+    console.log(`Hello, ${this.name}`); // Prototype property
+};
+
+let person = new Person('Alice');
+console.log(person.name); // Alice
+person.greet(); // Hello, Alice
+    </code></pre>
+    
+    <!-- 22. Pure Functions, Side Effects, State Mutation -->
+    <h2>22. Understand pure functions, side effects, and state mutation</h2>
+    <p><strong>Pure Functions:</strong> Functions that return the same result given the same inputs and have no side effects. <br>
+    <strong>Side Effects:</strong> Modifications of state outside the function's scope (e.g., changing a global variable). <br>
+    <strong>State Mutation:</strong> Altering the state of data directly.</p>
+    <pre><code>// Example of a pure function
+function add(a, b) {
+    return a + b; // No side effects
+}
+
+// Example of a function with side effects
+let count = 0;
+function increment() {
+    count++; // Side effect
+}
+increment();
+console.log(count); // 1
+    </code></pre>
+    
+    <!-- 23. Map/Reduce/Filter vs Loops -->
+    <h2>23. Understand how almost every for/while loop can be replaced with a map/reduce/filter, and why</h2>
+    <p>Functional methods like <code>map</code>, <code>reduce</code>, and <code>filter</code> provide a more declarative way to work with arrays compared to traditional loops. They help in writing more concise and readable code by abstracting common operations.</p>
+    <pre><code>// Example of map
+let numbers = [1, 2, 3];
+let doubled = numbers.map(n => n * 2); // [2, 4, 6]
+
+// Example of reduce
+let sum = numbers.reduce((acc, n) => acc + n, 0); // 6
+
+// Example of filter
+let evens = numbers.filter(n => n % 2 === 0); // [2]
+    </code></pre>
+    
+    <!-- 24. Lambdas and Arrow Functions -->
+    <h2>24. Understand what lambdas are (LINQ in C# as an example), and how map/reduce/filter + arrow functions change the way you think about your code</h2>
+    <p><strong>Lambdas:</strong> Anonymous functions or functions defined inline, such as arrow functions in JavaScript. <br>
+    Arrow functions provide a concise syntax and lexical scoping of <code>this</code>, which can simplify code and make it easier to work with.</p>
+    <pre><code>// Example of an arrow function (lambda)
+let add = (a, b) => a + b;
+console.log(add(2, 3)); // 5
+    </code></pre>
+    
+    <!-- 25. Closures -->
+    <h2>25. Understand how closures work, and how they look on the call stack</h2>
+    <p>A closure is a function that retains access to its lexical scope even after the function has finished executing. Closures allow for private data and encapsulation.</p>
+    <pre><code>// Example of a closure
+function makeCounter() {
+    let count = 0;
+    return function() {
+        count++;
+        return count;
+    };
+}
+
+let counter = makeCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+    </code></pre>
+    
+    <!-- 26. High Order Functions -->
+    <h2>26. Understand how high order functions work, and when to use them</h2>
+    <p>High-order functions are functions that take other functions as arguments or return them as results. They are useful for creating abstractions and reusable code.</p>
+    <pre><code>// Example of a high-order function
+function createMultiplier(factor) {
+    return function(x) {
+        return x * factor;
+    };
+}
+
+let double = createMultiplier(2);
+console.log(double(5)); // 10
+    </code></pre>
+    
+    <!-- 27. Abstract Data Structures -->
+    <h2>27. Understand what abstract data structures are, how to build them in JavaScript, and typical use cases for them</h2>
+    <p>Abstract data structures are conceptual models for organizing and storing data. Examples include stacks, queues, and linked lists. They provide a way to manage data efficiently.</p>
+    <pre><code>// Example of a stack in JavaScript
+class Stack {
+    constructor() {
+        this.items = [];
+    }
+    push(item) {
+        this.items.push(item);
+    }
+    pop() {
+        return this.items.pop();
+    }
+    peek() {
+        return this.items[this.items.length - 1];
+    }
+}
+
+let stack = new Stack();
+stack.push(1);
+stack.push(2);
+console.log(stack.pop()); // 2
+    </code></pre>
+    
+    <!-- 28. Recursion -->
+    <h2>28. Understand recursion and how to use them to build abstract data structures</h2>
+    <p>Recursion is a technique where a function calls itself to solve smaller instances of a problem. It's often used in algorithms and building data structures like trees.</p>
+    <pre><code>// Example of recursion (factorial function)
+function factorial(n) {
+    if (n === 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+console.log(factorial(5)); // 120
+    </code></pre>
+    
+    <!-- 29. Algorithms -->
+    <h2>29. Understand that algorithms to solve many common problems exist, and be familiar enough with them to find the one you need on Google</h2>
+    <p>Algorithms are step-by-step procedures for solving problems. Knowing a variety of algorithms and being able to search for solutions is crucial for problem-solving.</p>
+    
+    <!-- 30. is-a vs has-a Relationship -->
+    <h2>30. Understand the difference between the is-a and has-a relationship when it comes to inheritance, polymorphism, and code reuse</h2>
+    <p><strong>is-a:</strong> Represents inheritance (e.g., a Dog is an Animal). <br>
+    <strong>has-a:</strong> Represents composition (e.g., a Car has an Engine).</p>
+    <pre><code>// Example of is-a relationship
+class Animal {}
+class Dog extends Animal {}
+
+// Example of has-a relationship
+class Engine {}
+class Car {
+    constructor() {
+        this.engine = new Engine();
+    }
+}
+    </code></pre>
+    
+    <!-- 31. Design Patterns -->
+    <h2>31. Become familiar with the common design patterns, and which ones have uses in JavaScript</h2>
+    <p>Design patterns are typical solutions to common software design problems. Examples include Singleton, Factory, and Observer patterns. JavaScript's flexibility allows for various design patterns to be implemented effectively.</p>
+    
+    <!-- 32. Partial Functions, Currying, Compose, Pipe -->
+    <h2>32. Understand partial functions, currying, compose, and pipe. And understand why unary functions are so useful</h2>
+    <p><strong>Partial Functions:</strong> Functions with some arguments fixed. <br>
+    <strong>Currying:</strong> Transforming a function that takes multiple arguments into a sequence of functions each taking a single argument. <br>
+    <strong>Compose:</strong> Combining functions to produce a new function. <br>
+    <strong>Pipe:</strong> Passing the output of one function as the input to another. <br>
+    <strong>Unary Functions:</strong> Functions with a single argument.</p>
+    <pre><code>// Example of currying
+function multiply(a) {
+    return function(b) {
+        return a * b;
+    };
+}
+
+let double = multiply(2);
+console.log(double(5)); // 10
+
+// Example of compose
+function compose(f, g) {
+    return function(x) {
+        return f(g(x));
+    };
+}
+
+function add1(x) {
+    return x + 1;
+}
+
+function double(x) {
+    return x * 2;
+}
+
+let add1ThenDouble = compose(double, add1);
+console.log(add1ThenDouble(5)); // 12
+    </code></pre>
+    
+    <!-- 33. Reflection in JavaScript -->
+    <h2>33. Understand how reflection is different in JavaScript than in strongly typed, compiled languages, and why</h2>
+    <p>Reflection in JavaScript allows for inspecting and modifying the structure and behavior of objects at runtime. In contrast to strongly typed languages like Java or C#, where reflection is more rigid and type-specific, JavaScript's reflection capabilities are more dynamic due to its loosely typed nature.</p>
+    
+    <!-- 34. Memory Management -->
+    <h2>34. Understand memory management and garbage collection in JavaScript</h2>
+    <p>JavaScript uses automatic garbage collection to manage memory. The engine reclaims memory used by objects that are no longer referenced, helping to prevent memory leaks.</p>
+    
+    <!-- 35. Concurrency -->
+    <h2>35. Understand concurrency and parallelism and how they are handled in JavaScript</h2>
+    <p>JavaScript handles concurrency using the event loop and asynchronous operations. Although JavaScript itself is single-threaded, it can perform non-blocking operations using asynchronous APIs, Web Workers, and other concurrency mechanisms.</p>
+</body>
+</html>
